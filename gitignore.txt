@@ -2,7 +2,7 @@
 # Created by https://www.gitignore.io/api/r,python,windows,jupyternotebooks
 # Edit at https://www.gitignore.io/?templates=r,python,windows,jupyternotebooks
 ### Folders ###
-*.R
+**/*.R
 
 ### Pictures ###
 *.jpg
