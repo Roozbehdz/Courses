@@ -1,0 +1,116 @@
+---
+title: "Homework 2"
+author: "Roozbeh"
+date: "7/21/2019"
+output:
+  word_document: default
+  html_document: default
+---
+
+
+
+
+```{r }
+#read the googleplay3.csv file and place it in a data frame called df.
+df<-read.csv("C:/Users/10/Documents/Data Science/Data Science Course - Yaser Zerehsaz/HW/googleplaystore3-1.csv", header=TRUE, stringsAsFactors = F) 
+
+#Get the summary and structure of df.
+summary(df)
+str(df)
+
+#Are there any missing values in the data? Which variables?
+apply(is.na(df), 2, sum)
+
+#Change the levels of variable “Category” to 1 to 33.
+df$Category=factor(df$Category,
+                   levels = levels(as.factor(df$Category)),
+                   labels = seq(length(levels(as.factor(df$Category))))
+                  
+                   )
+
+#pply unique function to the variable “Type” and comment on its unique values.
+unique(df$Type)
+sum(is.na(df$type))
+sum(df$Type == " ")
+#It has no NA so it hasn't any missing values but it has 400 empty values.
+
+# Treating Missing Values
+
+#Replace the empty values with NA
+df$Type[df$Type == " "]= NA
+
+#Get the levels of variable “Type” using the levels function. 
+levels(as.factor(df$Type))
+
+#Get the summary of df
+summary(df)
+
+#Check the NA’s for the variable “Type”
+apply(is.na(df), 2, sum)
+
+#The “Last.Updated” column should be in “Date” format. Is it? If not, we need to coerce it to be a date variable so that R knows these are dates and not characters.
+df$Last.Updated<-as.Date(df$Last.Updated, 
+                         tryFormats =c("%m/%d/%Y","%Y/%d/%m","%Y-%d-%m","%m-%d-%Y","%d/%m/%Y","%Y/%m/%d","%Y-%m-%d","%d-%m-%Y")
+                         )
+
+#we need to compute a new variable called “Updates”. The new variable should give the number of days since the last update of the application
+df$Updates =as.numeric(Sys.Date()-df$Last.Updated)
+
+#Get the str(df) and check the structures.
+str(df)
+
+#Get the first five values of the variable “Installs” in the dataset.
+head(df$Installs,5)
+
+#We need to remove the “+” sign from the end of the number of installs and change the whole column into a numeric variable.
+makenumeric = function(x){
+                          spinst = unlist(strsplit(x,''))
+                          spinst=spinst[spinst!=',']
+                          spinst = paste(spinst[-c(length(spinst))],collapse ='')
+                          ;return (spinst)
+                          }
+
+for (i in 1:length(df$Installs)){
+                df$Installs[i] = makenumeric(df$Installs[i])
+}
+
+#remove the first, second, seventh and eighth columns from the dataset.
+keeps = c("Category","Rating","Reviews","Type","Updates")
+d=df[keeps]
+
+
+
+#Use the margin and aggregations plots to interpret the missing values patterns.
+library(mice) ;echo=FALSE
+library(VIM)
+
+aggr<- aggr(d, col=c('black','red'), numbers=TRUE, sortVars=TRUE, 
+labels=names(d), cex.axis=.7, gap=1, ylab=c("Barplot of missing data","Patterns"))
+
+md.pattern(d)
+md.pairs(d)
+
+for (i in seq(5)){
+  for (k in seq(5)){
+    marginplot(d[,c(i,k)])
+  }
+}
+
+#Use the function mice with m = 2 to impute the missing values.
+imput<-mice(d,m=2,meth=c("polyreg","sample","pmm","logreg","pmm"))
+
+#Use the xyplot, stripplot and densityplot to comment on the performance of imputation.
+xyplot(imput, Rating ~ Category+Reviews+Type+Updates|.imp, pch = 20, cex = 1.4)
+xyplot(imput, Reviews ~ Category+Rating+Type+Updates|.imp, pch = 20, cex = 1.4)
+
+stripplot(imput, pch = 20, cex = 1.2)
+
+densityplot(imput)
+
+#Perform the imputation using the complete function and get the summary of the resulting data frames.
+com<- complete(imput,1) 
+
+summary(com)
+
+```
+

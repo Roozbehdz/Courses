@@ -1,0 +1,530 @@
+---
+title: "Lecture 0 - Introduction"
+author: "Roozbeh"
+date: "November 29, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r Vectors}
+
+#Define points and vectors
+
+n <- 100 
+x <- c(1,2,3,4,5,6) # concatenate 
+x <- 1:10
+x<-seq(1,10.5,.5)
+y<-seq(20)
+
+#Manipulation
+x+y
+x*y
+x/y
+log(x^2+3)
+cumsum(x)
+sort(x,decreasing=TRUE) 
+crossprod(x,y)
+max(x)
+min(x)
+range(x)
+diff(x)
+diff(range(x))
+
+#Repeating a value or a string
+
+rep(1,5)
+rep(c(1,2),5)
+rep(TRUE,5)
+
+#Accessing the elements
+
+x[3]
+x[1:3]
+x[c(2,4)]
+dd<-c(rep(FALSE,10),rep(TRUE,10))
+x[dd]
+x[x>3]
+
+#Remove some elements
+
+x[-2]
+x[-c(3,6)]
+
+#Find the indices of matched patterns
+
+which(x>3)
+which(x>3 & x<8)
+which.max(x)
+which.min(x)
+which(x>3 & x<8 & x^2>20)
+which(x<3 | x>8)
+x[which(x>3)]
+
+#Dealing with missing data
+
+x<-c(seq(5),NA)
+is.na(x)
+mean(x)
+mean(x,na.rm=TRUE)
+x^2
+which(is.na(x))
+
+```
+```{r Matrices}
+
+#Define a matrix
+
+mat<-matrix(c(1,2,3,4),nrow=2,ncol=2) 
+mat<-matrix(x,nrow=3,ncol=2)
+
+#Reshape a matrix
+
+mat<-matrix(mat,nrow=2,ncol=3)
+
+#Binding vectors 
+
+X1<-c(2,3,4)
+X2<-c(0,6,7)
+X<-cbind(X1,X2)
+Y<-rbind(X1,X2)
+
+#Binding matrices
+
+A<-matrix(c(1,2,3,4),nrow=2,ncol=2) 
+B<- matrix(c(0,2,1,4),nrow=2,ncol=2) 
+
+cbind(A,B)
+rbind(A,B)
+
+#Get the length of a vector
+
+length(X1)
+
+#Get the dimension of an array
+
+dim(A)
+
+#Reshape an array to a vector (vectorize)
+
+c(A)
+
+#Add a column of ones to the beginning of a matrix 
+
+cbind(1,A)
+
+#Add a column of zeros to the end of a matrix
+
+cbind(A,0)
+
+#Compute the number of elements of a matrix 
+
+length(A)
+
+#Get the diagonal elements of a matrix
+
+diag(A)
+
+#Make a matrix with your desired diagonal elements 
+
+diag(X1)
+
+#Get the upper diagonal elements of a matrix
+
+A[upper.tri(A)]
+
+
+
+#Accessing the elements of a matrix 
+
+A[1,2]
+A[3,]
+A[,2]
+A[-1,]
+A[-c(2,3),]
+
+#Useful functions for matrices
+
+apply(A,1,mean)
+apply(A,2,mean)
+apply(A,1,max)
+
+
+
+
+```
+```{r Factors}
+
+#Creating a factor
+
+gender=c("male","female","female","male","female") 
+is.factor(gender)
+gender=factor(gender)
+levels(gender)
+
+#Change the levels
+
+levels(gender)=c("F","M")
+
+#Generate the levels
+
+gl(2,2,labels=c("male","female"))
+rep(gl(2,1,labels=c("male","female")),2)
+
+```
+```{r Dataframes}
+
+#Create a data frame 
+z <- rnorm(100) # generate 100 N(0,1) 
+x <- sample(z,5) # sample five from z 
+y <- runif(5) # generate 5 U(0,1)
+A <- data.frame(x=x,y=y)
+w<- c("Ali","Maryam","Mina","Shahin","Saghar")
+s<-c(1600,2800,3200,4500,5000)
+B<-data.frame(Names=w,Salary=s)
+start_date = as.Date(c("2012-01-01", "2013-09-23", "2014-11-15", "2014-05-11","2015-03-27"))
+start_date[1]-start_date[2]
+as.numeric(start_date[1]-start_date[2])
+weekdays(Sys.Date())
+months(Sys.Date())
+B$StartDate<- start_date
+B$Gender<-gender
+
+#Get the structure of the data frame
+
+str(B)
+
+#Change the factors in a data frame to strings
+
+B$Gender<-as.character(gender)
+str(B)
+
+#Get the summary of a data frame
+
+summary(B)
+
+#Access the elements of a data frame
+
+B[4,3]
+B[4,]
+Sys.Date()-B[4,3]
+B$Salary
+
+#Useful functions for data frames
+
+tapply(B$Salary,B$Gender,mean)
+tapply(B$StartDate,B$Gender,diff)
+
+#Adding a row
+
+B$Names<-as.character(B$Names)
+rbind(B,c("Yaser",3000,"2019-01-2","M"))
+
+#Sorting the data frame based on one variable order(B$Salary)
+
+order(B$Gender)
+B[order(B$Salary),]
+
+#Coerce a matrix into a data frame
+
+is.data.frame(A)
+is.matrix(A)
+as.data.frame(A)
+as.matrix(A)
+```
+```{r Lists}
+
+#Define a list in R
+
+x <- list("salam","h",3,4,5,6)
+y <- list("black","g",c(3,4,5),2.5,6)
+
+#Merge lists
+
+z<-c(x,y)
+
+#Put names on your list elements
+
+names(x)=c("A","B","C","D","E","F") 
+x$A
+x$C*2
+
+#Add an element to end of a list
+
+x[7]="new"
+
+#Remove an element from a list 
+
+x[6]=NULL
+
+#Convert a list to a vector
+
+f<-list(1:6) 
+v=unlist(f)
+
+
+```
+```{r Strings}
+
+g<-c ( "Data Science is cool", "just, give it some time!")
+
+#Add and merge strings
+
+paste(g,",and I agree")
+paste(c("Everybody knows",  " I would say,"),g)
+h<-paste(c("Everybody knows"," I would say"),g,collapse=".") 
+
+#Get the substring of a string
+
+substr(h,1,20)
+
+#Split the string
+strsplit(h,"")
+
+#Number of characters including space 
+
+nchar(h)
+nchar(paste(unlist(strsplit(h," ")),collapse=""))
+
+#Replace a pattern with a new text
+
+sub("knows","realizes",h) #first one only
+gsub("knows","realizes",h) #all matched patterns
+
+#Get the position(s) of matched patterns 
+
+regexpr("knows",h)
+gregexpr("knows",h)
+
+#Change the case 
+toupper(h)
+strsplit(h," ") 
+v=unlist(f)
+```
+```{r Files and Directories}
+
+#List all files
+mainpath="C:/Users/10/Documents/GitHub/DataScienceCourseZerehsaz"
+fnames = list.files(mainpath,full.names=FALSE,no.. = TRUE) 
+
+#Find all Directories
+
+all = list.files(mainpath,full.names=TRUE,no.. = TRUE)
+file.info(all)$isdir
+newpath=all[file.info(all)$isdir]
+```
+```{r Reading and Writing Files}
+
+#Save a data frame or matrix as a CSV file
+
+write.csv(B,"C:/Users/10/Documents/GitHub/DataScienceCourseZerehsaz/datasets/test.csv",row.names=FALSE)
+
+#Read a CSV file
+
+Bdat <- read.csv("C:/Users/10/Documents/GitHub/DataScienceCourseZerehsaz/datasets/test.csv")
+
+```
+```{r Exploratory Analysis}
+
+library(faraway)
+data(pima)
+head(pima,5)
+help(pima)
+dim(pima)
+summary(pima)
+
+#Do we have missing values in the dataset?
+
+d<-pima
+d$diastolic[d$diastolic==0]=NA
+d$glucose[d$glucose==0]=NA
+d$triceps[d$triceps==0]=NA
+d$bmi[d$bmi==0]=NA
+d$insulin[d$insulin==0]=NA
+summary(d)
+```
+```{r Charts and Graphs}
+
+#Histograms
+
+hist(d$diastolic,xlab="Diastolic",main="",col = "green",border="red")
+
+#Boxplots
+
+boxplot(d$diastolic,ylab="Diastolic",main="",col="blue")
+
+#Change the test results into categorical variables
+
+d$test<-as.factor(d$test)
+levels(d$test)=c("negative","positive")
+posCount<-length(which(d$test=="positive"))
+negCount<-length(which(d$test=="negative"))
+x<-c(negCount, posCount)
+lbl<-c("negative","positive")
+library(plotrix)
+pie3D(x,labels = lbl,explode = 0.1, main = "Pie Chart of Test Results")
+
+#Scatterplots
+
+plot(d$bmi,d$triceps,xlab="BMI",ylab="Triceps",main="")
+plot(d$test,d$diastolic,ylab="Diastolic",main="")
+
+#Matrix plots
+
+pairs(d[,c("glucose","bmi","triceps","insulin")])
+par(mfrow=c(2,2))
+plot(d$bmi,d$triceps,xlab="BMI",ylab="Triceps",main="")
+plot(pima$test,pima$diastolic,ylab="Diastolic",main="")
+
+```
+```{r Treating Missing Values}
+
+#Look at the pattern of missing values
+
+#Install “mice” and “VIM” packages 
+
+library(mice)
+library(VIM)
+aggr<- aggr(d, col=c('black','red'), numbers=TRUE, sortVars=TRUE, 
+labels=names(d), cex.axis=.7, gap=1, ylab=c("Barplot of missing data","Patterns"))
+
+#What can we say about the missing values in this dataset?
+```
+
+```{r Scrutinize the Patterns}
+
+md.pattern(d)
+md.pairs(d)
+
+```
+```{r Margin Plots}
+
+marginplot(d[,c(2,5)])
+marginplot(d[,c(4,5)])
+marginplot(d[,c(8,4)])
+
+```
+```{r Missing Values in Observations}
+
+#Functions you may need: is.na(),sum, length(), apply
+
+missnum<-function(x){a<-sum(is.na(x))/length(x); return(a)} 
+miss<-apply(d,2,missnum)
+
+```
+```{r Impute the Missing Values}
+
+impu <- mice(d,m=5,maxit=50,meth='pmm')
+
+```
+```{r Check the Imputed Data}
+
+impu$imp$glucose
+
+```
+```{r Replace the Imputed Data}
+
+com<- complete(impu,1) 
+summary(com)
+
+```
+```{r Performance Analysis}
+
+xyplot(impu, insulin ~ triceps+glucose+diastolic| .imp, pch = 20, cex = 1.4)
+stripplot(impu, pch = 20, cex = 1.2)
+densityplot(impu)
+
+```
+```{r Read Data from Two CSV Files}
+
+ratings=read.csv('C:/Users/10/Documents/GitHub/DataScienceCourseZerehsaz/Materials/ratings.csv')
+meta=read.csv('C:/Users/10/Documents/GitHub/DataScienceCourseZerehsaz/Materials/movies_metadata.csv')
+head(ratings,1)
+head(meta,1)
+fix(meta)
+meta= meta[c('id','vote_average','title','popularity','vote_count')] 
+ratings= ratings[c('userId','rating','movieId')]
+head(meta,1)
+head(ratings,1)
+
+```
+```{r Merge Dataframe}
+
+#Change the name first
+
+colnames(meta)[1]="movieId"
+
+#Merge the data frames based on the common column
+
+merged=merge.data.frame(ratings,meta,"movieId") 
+head(merged)
+
+```
+```{r Manipulate the Data}
+
+
+#Compute the average of ratings for some movies
+
+mean(merged[merged['movieId']==800,'rating'])
+mean(merged[merged['movieId']==16,'rating'])
+
+#Which users voted the highest for movie id 800? 
+
+m800<-merged[merged['movieId']==800,]
+head(m800)
+m800[m800['rating']==5, 'userId']
+
+```
+```{r Basics of Recommender Systems}
+
+#Compare the users (how similar users behave)
+
+u817<-merged[merged['userId']=="817",]
+u1893<-merged[merged['userId']==1893,]
+u817m<-merged[merged['userId']=="817",'movieId']
+u1893m<-merged[merged['userId']==1893,'movieId'] 
+common<- intersect(u817m,u1893m)
+findcom1<-function(x){avg<-u1893[u1893['movieId']==x,'rating']; return(avg)}
+findcom2<-function(x){avg<-u817[u817['movieId']==x,'rating']; return(avg)}
+ra1893<-apply(as.matrix(common),1,findcom1)
+ra817<-apply(as.matrix(common),1,findcom2)
+cor(ra1893, ra817)
+norm(as.matrix(ra1893-ra817),"f")/length(common)
+
+#Compare users 817 and 7199
+
+u817<-merged[merged['userId']=="817",]
+u7199<-merged[merged['userId']=="7199",]
+u817m<-merged[merged['userId']=="817",'movieId']
+u7199m<-merged[merged['userId']=="7199",'movieId'] 
+common<- intersect(u817m,u7199m)
+findcom1<-function(x){avg<-u7199[u7199['movieId']==x,'rating']; return(avg)}
+findcom2<-function(x){avg<-u817[u817['movieId']==x,'rating']; return(avg)}
+ra7199<-apply(as.matrix(common),1,findcom1)
+ra817<-apply(as.matrix(common),1,findcom2)
+cor(ra7199, ra817)
+norm(as.matrix(ra7199-ra817),"f")/length(common)
+
+#Recommend a movie to User 7199
+
+u817[u817["rating"]==5 & u817["vote_average"]>7.9 ,] 
+
+#Are there movies common?
+
+print(common)
+setdiff(u817[u817["rating"]==5 & u817["vote_average"]>7.9 ,'movieId'],common)
+
+#If not, recommend them!
+
+u817[u817['movieId']==426,]
+
+
+```
