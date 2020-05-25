@@ -1,8 +1,11 @@
 
 # Created by https://www.gitignore.io/api/r,python,windows,jupyternotebooks
 # Edit at https://www.gitignore.io/?templates=r,python,windows,jupyternotebooks
+### Folders ###
 /Machine Learning Courses/Machine Learning A-Z By Kirill Eremenko/Part 8 - Deep Learning/Section 40 - Convolutional Neural Networks (CNN)/dataset/
 
+### Files ###
+**/3.14.Confidence-intervals.Two-means.Independent-samples-Part-1-exercise-solution.xlsx
 ### Pictures ###
 
 
