@@ -5,7 +5,7 @@
 
 
 ### Pictures ###
-**/*.jpg
+*.jpg
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks
