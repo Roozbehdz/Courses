@@ -44,9 +44,7 @@ def svm_loss_naive(W, X, y, reg):
     # to be an average instead so we divide by num.
     loss /= num_train
     dW /= num_train
-    # Add regularization to the loss.
-    loss += reg * np.sum(W * W)
-
+    
     # Add regularization
     loss += reg * np.sum(W * W)
     dW += reg*W
@@ -89,6 +87,7 @@ def svm_loss_vectorized(W, X, y, reg):
     margins = np.maximum(0, scores - np.matrix(yi_scores).T + 1)
     margins[np.arange(num_train),y] = 0
     loss = np.mean(np.sum(margins, axis=1))
+    loss = np.sum(loss)
     loss +=  reg * np.sum(W * W)
     pass
 
