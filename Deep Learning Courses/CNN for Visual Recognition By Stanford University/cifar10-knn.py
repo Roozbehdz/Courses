@@ -26,6 +26,7 @@ X_train = np.reshape(X_train, (X_train.shape[0], -1))
 X_test = np.reshape(X_test, (X_test.shape[0], -1))
 print(X_train.shape, X_test.shape)
 
+
 # Create a kNN classifier instance.
 # Remember that training a kNN classifier is a noop:
 # the Classifier simply remembers the data and does no further processing
